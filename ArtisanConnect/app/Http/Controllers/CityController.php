@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Models\City;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class CityController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categories = Category::all();
-        return view('admin.categories.index', compact('categories'));
+
+        $cities = City::latest()->get();
+
+
+        return view('Admin.City.City_add', compact('cities'));
     }
 
     /**
@@ -29,20 +32,23 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
-            'name' => 'required|string|max:255|unique:categories',
-            'icon' => 'nullable|string', 
+            'name' => 'required|string|unique:cities,name|max:100',
         ]);
 
-        Category::create($request->all());
+        
+        \App\Models\City::create([
+            'name' => $request->name
+        ]);
 
-        return back()->with('success', 'Catégorie ajoutée avec succès !');
+        return back()->with('success', 'Ville ajoutée مع نجاح!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(City $city)
     {
         //
     }
@@ -50,7 +56,7 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category)
+    public function edit(City $city)
     {
         //
     }
@@ -58,7 +64,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, City $city)
     {
         //
     }
@@ -66,9 +72,12 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(City $city)
     {
-        $category->delete();
-        return back()->with('success', 'La catégorie a été supprimée avec succès.');
+       
+        $city->delete();
+
+        
+        return back();
     }
 }
